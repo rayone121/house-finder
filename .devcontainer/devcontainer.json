@@ -18,6 +18,9 @@
         "ghcr.io/michidk/devcontainers-features/bun:1": {},
         "ghcr.io/devcontainers/features/nix:1": {}
     },
+    "mounts": [
+        "type=bind,source=${localEnv:HOME}/.ssh,target=/root/.ssh,readonly",
+    ],
     "postCreateCommand": [
         "nix-env -iA nixpkgs.lazygit"
     ]
