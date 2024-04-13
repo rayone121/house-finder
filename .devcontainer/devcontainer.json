@@ -1,0 +1,11 @@
+{
+    "name": "house-finder",
+    "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+    "features": {
+        "ghcr.io/devcontainers/features/go:1": {},
+        "ghcr.io/devcontainers/features/git:1": {
+            "ppa" : "false"
+        },
+        "ghcr.io/michidk/devcontainers-features/bun:1": {}
+    }
+}
