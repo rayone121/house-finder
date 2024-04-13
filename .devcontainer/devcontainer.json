@@ -1,12 +1,24 @@
 {
     "name": "house-finder",
     "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vscode-icons-team.vscode-icons",
+                "jdinhlife.gruvbox",
+                "oven.bun-vscode"
+            ]
+        }
+    },
     "features": {
         "ghcr.io/devcontainers/features/go:1": {},
         "ghcr.io/devcontainers/features/git:1": {
             "ppa" : "false"
         },
         "ghcr.io/michidk/devcontainers-features/bun:1": {},
-        "ghcr.io/GeorgOfenbeck/features/lazygit-linuxbinary:1": {}
-    }
+        "ghcr.io/devcontainers/features/nix:1": {}
+    },
+    "postCreateCommand": [
+        "nix-env -iA nixpkgs.lazygit"
+    ]
 }
