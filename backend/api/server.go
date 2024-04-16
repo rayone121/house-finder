@@ -7,39 +7,25 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/rayone121/house-finder/backend/storage"
 )
-
-type apiFunc func(http.ResponseWriter, *http.Request) error
-
-type apiError struct {
-	Error string
-}
-
-func writeJSON(w http.ResponseWriter, status int, v any) error {
-	w.WriteHeader(status)
-	w.Header().Set("Content Type", "application/JSON")
-	return json.NewEncoder(w).Encode(v)
-}
-
-func makeHTTPHandleFunc(f apiFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		if err := f(w, r); err != nil {
-			writeJSON(w, http.StatusBadRequest, apiError{Error: err.Error()})
-		}
-	}
-}
 
 type APIServer struct {
 	listenAddr string
+	store      storage.Storage
 }
 
-func newAPIServer(listenAddr string) *APIServer {
-	return &APIServer{listenAddr: listenAddr}
+func NewAPIServer(listenAddr string, store storage.Storage) *APIServer {
+	return &APIServer{
+		listenAddr: listenAddr,
+		store:      store,
+	}
 }
 
 func (s *APIServer) Start() {
 	router := mux.NewRouter()
 	router.HandleFunc("/account", makeHTTPHandleFunc(s.handleAccount))
+	router.HandleFunc("/account/{id}", makeHTTPHandleFunc(s.handleGetAccount))
 
 	log.Println("JSON API Server running on port: ", s.listenAddr)
 
@@ -56,4 +42,24 @@ func (s *APIServer) handleAccount(w http.ResponseWriter, r *http.Request) error 
 		return s.handleDeleteAccount(w, r)
 	}
 	return fmt.Errorf("Method not allowed %s", r.Method)
+}
+
+type apiFunc func(http.ResponseWriter, *http.Request) error
+
+type apiError struct {
+	Error string
+}
+
+func writeJSON(w http.ResponseWriter, status int, v any) error {
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(status)
+	return json.NewEncoder(w).Encode(v)
+}
+
+func makeHTTPHandleFunc(f apiFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if err := f(w, r); err != nil {
+			writeJSON(w, http.StatusBadRequest, apiError{Error: err.Error()})
+		}
+	}
 }

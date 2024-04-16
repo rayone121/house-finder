@@ -3,19 +3,19 @@ package types
 import "math/rand"
 
 type Account struct {
-	ID        int
-	FirstName string
-	LastName  string
-	UserName  string
-	Number    int64
+	ID          int    `json:"id"`
+	FirstName   string `json:"firstName"`
+	LastName    string `json:"lastName"`
+	UserName    string `json:"userName"`
+	PhoneNumber int64  `json:"phoneNumber"`
 }
 
 func NewAccount(firstName, lastName, userName string) *Account {
 	return &Account{
-		ID:        rand.Intn(10000),
-		FirstName: firstName,
-		LastName:  lastName,
-		UserName:  userName,
-		Number:    int64(rand.Intn(1000000)),
+		ID:          rand.Intn(10000),
+		FirstName:   firstName,
+		LastName:    lastName,
+		UserName:    userName,
+		PhoneNumber: int64(rand.Intn(1000000)),
 	}
 }

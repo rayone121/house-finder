@@ -1,14 +1,13 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+
+	"github.com/rayone121/house-finder/backend/api"
 )
 
 func main() {
-	listenAddr := flag.String("listenaddr", "3000", "the server address")
-
-	server := newAPIServer(":3000")
+	server := api.NewAPIServer(":3000")
 	server.Start()
 	fmt.Println("Hello, World!")
 }
