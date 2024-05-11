@@ -25,7 +25,8 @@ func NewAPIServer(listenAddr string, store storage.Storage) *APIServer {
 func (s *APIServer) Start() {
 	router := mux.NewRouter()
 	router.HandleFunc("/account", makeHTTPHandleFunc(s.handleAccount))
-	router.HandleFunc("/account/{id}", makeHTTPHandleFunc(s.handleGetAccount))
+	router.HandleFunc("/account/{id}", makeHTTPHandleFunc(s.handleGetAccountByID))
+	router.HandleFunc("/transfer", makeHTTPHandleFunc(s.handleTransferReq))
 
 	log.Println("JSON API Server running on port: ", s.listenAddr)
 
@@ -38,8 +39,6 @@ func (s *APIServer) handleAccount(w http.ResponseWriter, r *http.Request) error 
 		return s.handleGetAccount(w, r)
 	case "POST":
 		return s.handleCreateAccount(w, r)
-	case "DELETE":
-		return s.handleDeleteAccount(w, r)
 	}
 	return fmt.Errorf("Method not allowed %s", r.Method)
 }
@@ -47,7 +46,7 @@ func (s *APIServer) handleAccount(w http.ResponseWriter, r *http.Request) error 
 type apiFunc func(http.ResponseWriter, *http.Request) error
 
 type apiError struct {
-	Error string
+	Error string `json:"error"`
 }
 
 func writeJSON(w http.ResponseWriter, status int, v any) error {

@@ -26,4 +26,8 @@ test:
 run:build
 	@$(BEPATH)/bin/$(BINARY_NAME)
 
+pg: 
+	@docker rm -f post-db
+	@docker run --name post-db -e POSTGRES_PASSWORD=1234 -p 5432:5432 -d postgres
+
 ## FRONT END TASKS ##
