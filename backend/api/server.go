@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/rayone121/house-finder/backend/storage"
+	"github.com/rayone121/reBank/backend/storage"
 )
 
 type APIServer struct {
@@ -25,7 +25,7 @@ func NewAPIServer(listenAddr string, store storage.Storage) *APIServer {
 func (s *APIServer) Start() {
 	router := mux.NewRouter()
 	router.HandleFunc("/account", makeHTTPHandleFunc(s.handleAccount))
-	router.HandleFunc("/account/{id}", makeHTTPHandleFunc(s.handleGetAccountByID))
+	router.HandleFunc("/account/{id}", withJWTAuth(makeHTTPHandleFunc(s.handleGetAccountByID)))
 	router.HandleFunc("/transfer", makeHTTPHandleFunc(s.handleTransferReq))
 
 	log.Println("JSON API Server running on port: ", s.listenAddr)

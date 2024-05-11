@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	_ "github.com/lib/pq"
-	"github.com/rayone121/house-finder/backend/types"
+	"github.com/rayone121/reBank/backend/types"
 )
 
 type Storage interface {

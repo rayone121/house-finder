@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/rayone121/house-finder/backend/types"
+	"github.com/rayone121/reBank/backend/types"
 )
 
 func (s *APIServer) handleGetAccount(w http.ResponseWriter, r *http.Request) error {
@@ -50,7 +50,7 @@ func (s *APIServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) 
 	if err := json.NewDecoder(r.Body).Decode(createAccReq); err != nil {
 		return err
 	}
-	account := types.NewAccount(createAccReq.FirstName, createAccReq.LastName, createAccReq.UserName)
+	account := types.NewAccount(createAccReq.FirstName, createAccReq.LastName, createAccReq.UserName, createAccReq.PhoneNumber)
 	if err := s.store.CreateAccount(account); err != nil {
 		return err
 	}

@@ -1,11 +1,13 @@
 package main
 
+// reBank is a simple bank application that allows users to create accounts, transfer money between accounts, and view account balances.
+
 import (
 	"fmt"
 	"log"
 
-	"github.com/rayone121/house-finder/backend/api"
-	"github.com/rayone121/house-finder/backend/storage"
+	"github.com/rayone121/reBank/backend/api"
+	"github.com/rayone121/reBank/backend/storage"
 )
 
 func main() {

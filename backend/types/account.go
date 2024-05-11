@@ -1,7 +1,6 @@
 package types
 
 import (
-	"math/rand"
 	"time"
 )
 
@@ -26,12 +25,12 @@ type Account struct {
 	CreatedAt   time.Time `json:"createdAt"`
 }
 
-func NewAccount(firstName, lastName, userName string) *Account {
+func NewAccount(firstName, lastName, userName string, phoneNumber int64) *Account {
 	return &Account{
 		FirstName:   firstName,
 		LastName:    lastName,
 		UserName:    userName,
-		PhoneNumber: int64(rand.Intn(1000000)),
+		PhoneNumber: phoneNumber,
 		CreatedAt:   time.Now().UTC(),
 		Balance:     0,
 	}
