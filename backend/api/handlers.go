@@ -10,6 +10,40 @@ import (
 	"github.com/rayone121/reBank/backend/types"
 )
 
+func (s *APIServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
+	if r.Method != "POST" {
+		return fmt.Errorf("Method not allowed %s", r.Method)
+	}
+
+	var req types.LoginRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		return err
+	}
+
+	acc, err := s.store.GetAccountByUserName(req.UserName)
+	if err != nil {
+		return err
+	}
+
+	if !acc.ValidPassword(req.Password) {
+		return fmt.Errorf("invalid password")
+	}
+
+	token, err := createJWT(acc)
+	if err != nil {
+		return err
+	}
+
+	resp := types.LoginResponse{
+		Token:    token,
+		Number:   acc.Number,
+		UserName: acc.UserName,
+	}
+
+	return writeJSON(w, http.StatusOK, resp)
+}
+
 func (s *APIServer) handleGetAccount(w http.ResponseWriter, r *http.Request) error {
 	accounts, err := s.store.GetAccounts()
 	if err != nil {
@@ -46,14 +80,19 @@ func (s *APIServer) handleGetAccountByID(w http.ResponseWriter, r *http.Request)
 }
 
 func (s *APIServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) error {
-	createAccReq := new(types.CreateAccountRequest)
-	if err := json.NewDecoder(r.Body).Decode(createAccReq); err != nil {
+	req := new(types.CreateAccountRequest)
+	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 		return err
 	}
-	account := types.NewAccount(createAccReq.FirstName, createAccReq.LastName, createAccReq.UserName, createAccReq.PhoneNumber)
+	account, err := types.NewAccount(req.FirstName, req.LastName, req.UserName, req.Password)
+	if err != nil {
+		return err
+	}
+
 	if err := s.store.CreateAccount(account); err != nil {
 		return err
 	}
+
 	return writeJSON(w, http.StatusOK, account)
 }
 
