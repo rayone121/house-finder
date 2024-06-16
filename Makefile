@@ -8,7 +8,7 @@ FEPATH = ./frontend
 GOCMD = go
 GOBUILD = $(GOCMD) build
 GOTEST = $(GOCMD) test
-BINARY_NAME = housefinder
+BINARY_NAME = reBank
 
 #BUN VARS
 
@@ -17,14 +17,14 @@ BINARY_NAME = housefinder
 
 # Build task
 build:
-	@$(GOBUILD) -o $(BEPATH)/bin/$(BINARY_NAME) $(BEPATH)
+	$(GOBUILD) -o $(BEPATH)/bin/$(BINARY_NAME) $(BEPATH)
 
 # Test task
 test:
 	@$(GOTEST) -v $(BEPATH)
 
 run:build
-	@$(BEPATH)/bin/$(BINARY_NAME)
+	@$(BEPATH)/bin/$(BINARY_NAME) --seed true
 
 pg: 
 	@docker rm -f post-db

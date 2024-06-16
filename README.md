@@ -20,7 +20,7 @@ git clone https://github.com/rayone121/reBank.git
 
 2. Navigate to the project directory
 ```bash
-cd reBank
+cd ./reBank
 ```
 
 3. Install the necessary Go packages
@@ -32,6 +32,53 @@ go mod tidy
 ```bash
 make pg
 make run
+```
+# reBank API Documentation
+
+## Overview
+reBank is a simple banking application that allows users to create accounts, transfer money between accounts, and view account balances.
+
+## Endpoints
+
+### `POST /login`
+Handles user login.
+
+### `GET /account`
+Returns the account details of the logged-in user.
+
+### `POST /account`
+Creates a new account.
+
+### `GET /account/{id}`
+Returns the account details of a specific user by ID.
+
+### `DELETE /account/{id}`
+Deletes a specific user account by ID.
+
+### `POST /transfer`
+Handles money transfer requests between accounts.
+
+## Account Structure
+Accounts are represented as follows:
+
+```go
+type Account struct {
+	ID                int       `json:"id"`
+	FirstName         string    `json:"firstName"`
+	LastName          string    `json:"lastName"`
+	UserName          string    `json:"userName"`
+	EncryptedPassword string    `json:"_"`
+	Balance           int64     `json:"balance"`
+	Number            int64     `json:"number"`
+	CreatedAt         time.Time `json:"createdAt"`
+}
+```
+
+## Running the Server
+To run the server, execute the `main` function in `main.go`. You can seed the database with test data by passing the `--seed true` flag:
+
+```sh
+go run main.go --seed true
 ```
 
 ## Built With
