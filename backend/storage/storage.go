@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	_ "github.com/lib/pq"
+	"github.com/rayone121/reBank/backend/config"
 	"github.com/rayone121/reBank/backend/types"
 )
 
@@ -23,7 +24,7 @@ type PostgressStore struct {
 }
 
 func NewPostgressStore() (*PostgressStore, error) {
-	connStr := "postgres://postgres:1234@localhost/postgres?sslmode=disable"
+	connStr := config.GetDBConnectionString()
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err
